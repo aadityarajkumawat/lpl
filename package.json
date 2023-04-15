@@ -1,0 +1,12 @@
+{
+  "name": "pfc",
+  "version": "1.0.0",
+  "description": "A NewsOracle Proof-of-Concept",
+  "main": "index.js",
+  "author": "Aditya Raj Kumawat",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^18.15.11",
+    "typescript": "^5.0.4"
+  }
+}
