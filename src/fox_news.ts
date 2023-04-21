@@ -24,7 +24,7 @@ export async function foxNewsScraper() {
         const news = client.db('news_directory').collection('news')
 
         const browser = await puppeteer.launch({
-//            headless: false,
+            // headless: false,
         })
         const page = await browser.newPage()
         const URL = FOX_NEWS
@@ -54,7 +54,7 @@ export async function foxNewsScraper() {
 
         let tempArticles: Array<ArticleDoc> = []
 
-        for (let i = 0; i < articles.length; i++) {
+        for (let i = 80; i < articles.length; i++) {
             const articleDoc = createArticle('fox_news')
             log('Article: ', i + 1)
 
@@ -94,7 +94,21 @@ export async function foxNewsScraper() {
 
             log('Going to:', link)
             // Redirect to page with article
-            await articlePage.goto(link, { timeout: 0 })
+            await articlePage.goto(link, {
+                timeout: 0,
+                waitUntil: 'networkidle2',
+            })
+
+            try {
+                await articlePage.waitForSelector('h1.heading', {
+                    timeout: 1000 * 60 * 10,
+                })
+                await articlePage.waitForSelector('.article-body', {
+                    timeout: 1000 * 60 * 10,
+                })
+            } catch (error) {
+                log('Error waiting for article page to load', error.message)
+            }
 
             // Get Article Headline from the article page
             try {
@@ -160,16 +174,16 @@ export async function foxNewsScraper() {
             tempArticles.push(articleDoc)
 
             if (tempArticles.length > 5) {
-                await news.insertMany(tempArticles)
+                // await news.insertMany(tempArticles)
                 // await addArticles(tempArticles)
                 log('Article Saved', tempArticles.length)
                 tempArticles = []
             }
 
             log(JSON.stringify(articleDoc, null, 2))
-        }
 
-        await sleepFor(1000, 2000)
+            await sleepFor(5000, 8000)
+        }
     } catch (error) {
         log(error)
     }
