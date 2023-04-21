@@ -1,6 +1,6 @@
 import { appendFileSync, writeFileSync } from 'fs'
 
-const mytime = () => {
+export const mytime = () => {
     const now = new Date()
     const options: Intl.DateTimeFormatOptions = {
         timeZone: 'Asia/Kolkata',
@@ -17,13 +17,17 @@ const mytime = () => {
     const formatter = new Intl.DateTimeFormat('en-IN', options)
     const currentTime = formatter.format(now)
     return currentTime
+        .replace(', ', '_')
+        .replace(' ', '_')
+        .replace('/', '_')
+        .replace('/', '_')
 }
 
-function logger() {
+export function logger() {
     // create file
     const fileName = `server_${mytime()}.log`
 
-    writeFileSync(fileName, '')
+    writeFileSync(fileName, '', { encoding: 'utf-8' })
 
     return function log(...message: any[]) {
         const time = mytime() //`${date.toLocaleString()}`

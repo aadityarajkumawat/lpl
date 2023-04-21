@@ -4,6 +4,12 @@ import { log } from './logger'
 
 config()
 
+// const fileName = `server_${mytime()}.log`
+
+// console.log('writing file', fileName)
+
+// writeFileSync(fileName, '')
+
 async function main() {
     // await initChroma()
     await foxNewsScraper()
