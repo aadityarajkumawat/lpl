@@ -16,7 +16,7 @@ import { createArticle, removeAds, removeWeeds, sleepFor } from './utils'
  * each article card if wrapped inside a container with class name `article`
  * irrespective of the size of the card.
  */
-const MAX_ARTICLES = 160
+const MAX_ARTICLES = 90
 
 export async function foxNewsScraper() {
     try {
@@ -51,7 +51,7 @@ export async function foxNewsScraper() {
         // opens new tab
         const articlePage = await browser.newPage()
 
-        for (let i = 0; i < articles.length; i++) {
+        for (let i = 0; i < MAX_ARTICLES; i++) {
             const articleDoc = createArticle('fox_news')
             log('Article: ', i + 1)
 
