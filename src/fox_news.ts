@@ -1,5 +1,4 @@
 import puppeteer from 'puppeteer'
-import { addArticles } from './chromadb'
 import { FOX_NEWS } from './consts'
 import { client } from './db'
 import { log } from './logger'
@@ -108,6 +107,15 @@ export async function foxNewsScraper() {
                 )
                 articleDoc.metaData.headline = headline || ''
                 log('Headline: ', headline)
+
+                const exists = await news.countDocuments({
+                    'metaData.headline': headline,
+                })
+
+                if (exists) {
+                    log('Article already exists')
+                    continue
+                }
 
                 // Get Article Image from the article page
                 const imageSource = await article.$eval('img', (el) => el.src)
