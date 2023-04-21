@@ -1,4 +1,5 @@
 import puppeteer from 'puppeteer'
+import { addArticles } from './chromadb'
 import { FOX_NEWS } from './consts'
 import { client } from './db'
 import { log } from './logger'
@@ -163,7 +164,7 @@ export async function foxNewsScraper() {
             tempArticles.push(articleDoc)
 
             if (tempArticles.length > 5) {
-                // await news.insertMany(tempArticles)
+                await news.insertMany(tempArticles)
                 // await addArticles(tempArticles)
                 log('Article Saved', tempArticles.length)
                 tempArticles = []

@@ -15,11 +15,7 @@ async function main() {
     await foxNewsScraper()
 }
 
-main()
-    .then(() => {
-        log('Successfully Completed!')
-        process.exit()
-    })
-    .catch((e) => {
-        log(e.message)
-    })
+main().then(() => {
+    log('Successfully Completed!')
+    process.exit()
+})
