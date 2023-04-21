@@ -10,7 +10,10 @@ async function main() {
 }
 
 main()
-    .then(() => log('Successfully Completed!'))
+    .then(() => {
+        log('Successfully Completed!')
+        process.exit()
+    })
     .catch((e) => {
         log(e.message)
     })
