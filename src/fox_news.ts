@@ -24,7 +24,7 @@ export async function foxNewsScraper() {
         const news = client.db('news_directory').collection('news')
 
         const browser = await puppeteer.launch({
-            headless: false,
+//            headless: false,
         })
         const page = await browser.newPage()
         const URL = FOX_NEWS
