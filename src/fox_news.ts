@@ -56,6 +56,7 @@ export async function foxNewsScraper() {
 
         for (let i = 0; i < articles.length; i++) {
             const articleDoc = createArticle('fox_news')
+            log('Article: ', i + 1)
 
             const article = articles[i]
 
@@ -91,6 +92,7 @@ export async function foxNewsScraper() {
 
             if (!link) continue
 
+            log('Going to:', link)
             // Redirect to page with article
             await articlePage.goto(link, { timeout: 0 })
 
