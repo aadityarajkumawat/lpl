@@ -2,7 +2,6 @@ import puppeteer from 'puppeteer'
 import { FOX_NEWS } from './consts'
 import { client } from './db'
 import { log } from './logger'
-import { ArticleDoc } from './types'
 import { createArticle, removeAds, removeWeeds, sleepFor } from './utils'
 
 /**
@@ -51,8 +50,6 @@ export async function foxNewsScraper() {
 
         // opens new tab
         const articlePage = await browser.newPage()
-
-        let tempArticles: Array<ArticleDoc> = []
 
         for (let i = 0; i < articles.length; i++) {
             const articleDoc = createArticle('fox_news')
@@ -169,14 +166,9 @@ export async function foxNewsScraper() {
             const articleBodyContent = articleText.join('\n')
             articleDoc.content = articleBodyContent
 
-            tempArticles.push(articleDoc)
-
-            if (tempArticles.length > 5) {
-                await news.insertMany(tempArticles)
-                // await addArticles(tempArticles)
-                log('Article Saved', tempArticles.length)
-                tempArticles = []
-            }
+            await news.insertOne(articleDoc)
+            // await addArticles(tempArticles)
+            log('Article Saved')
 
             log(JSON.stringify(articleDoc, null, 2))
 
