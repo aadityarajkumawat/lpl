@@ -54,7 +54,7 @@ export async function foxNewsScraper() {
 
         let tempArticles: Array<ArticleDoc> = []
 
-        for (let i = 80; i < articles.length; i++) {
+        for (let i = 0; i < articles.length; i++) {
             const articleDoc = createArticle('fox_news')
             log('Article: ', i + 1)
 
