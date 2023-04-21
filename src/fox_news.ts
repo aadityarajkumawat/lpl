@@ -99,17 +99,6 @@ export async function foxNewsScraper() {
                 waitUntil: 'networkidle2',
             })
 
-            try {
-                await articlePage.waitForSelector('h1.heading', {
-                    timeout: 1000 * 60 * 10,
-                })
-                await articlePage.waitForSelector('.article-body', {
-                    timeout: 1000 * 60 * 10,
-                })
-            } catch (error) {
-                log('Error waiting for article page to load', error.message)
-            }
-
             // Get Article Headline from the article page
             try {
                 const headline = await articlePage.$eval(
