@@ -166,7 +166,7 @@ export async function foxNewsScraper() {
             const articleBodyContent = articleText.join('\n')
             articleDoc.content = articleBodyContent
 
-            await news.insertOne(articleDoc)
+            await news.insertOne({ ...articleDoc, createdAt: new Date() })
             // await addArticles(tempArticles)
             log('Article Saved')
 
