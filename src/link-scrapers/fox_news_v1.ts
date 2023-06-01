@@ -59,10 +59,14 @@ export async function foxNewsScraperV1() {
                 log(`Couldn't find link for article ${i}`)
             }
 
-            articleDocs.push(articleDoc)
+            const exists = await news.findOne({ link: articleDoc.link })
+
+            if (!exists) {
+                articleDocs.push(articleDoc)
+            }
         }
 
-        await news.insertMany(articleDocs)
+        await news.insertMany(articleDocs, {})
     } catch (error) {
         log(error)
     }
