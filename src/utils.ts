@@ -1,3 +1,5 @@
+import { ChatOpenAI } from 'langchain/chat_models/openai'
+import { HumanChatMessage, SystemChatMessage } from 'langchain/schema'
 import { Page } from 'puppeteer'
 import { log } from './logger'
 
@@ -13,14 +15,16 @@ export async function sleepFor(min: number, max: number) {
 
 export function createArticle(source: 'fox_news' | 'cnn' | 'tech_crunch') {
     const articleDoc = {
-        metaData: {
-            headline: '',
-            date: '',
-            link: '',
-            image: '',
-            source,
-        },
+        headline: '',
+        date: '',
+        link: '',
+        image: '',
+        source,
         content: '',
+        digested: false,
+        digestedAt: new Date(),
+        updatedAt: new Date(),
+        createdAt: new Date(),
     }
 
     return articleDoc
@@ -62,6 +66,8 @@ export async function removeWeeds(page: Page) {
             '.collection-features-faces',
         )
 
+        const featured = document.querySelectorAll('.featured')
+
         if (elm) {
             elm.remove()
         }
@@ -81,5 +87,29 @@ export async function removeWeeds(page: Page) {
         featureFaces.forEach((card) => {
             card.remove()
         })
+
+        featured.forEach((card) => {
+            card.remove()
+        })
     })
+}
+
+export async function sanitizeArticleContent(content: string) {
+    const prompt = `
+    Take the following content and write it in a way that is more readable and easier to understand, remove any unnecessary information, keep it around 100 words, also remove any mentions of news sources, like Fox News, CNN, etc.:
+
+    == CONTENT ==
+    ${content}
+
+    == RESULT ==
+    `.trim()
+
+    const chat = new ChatOpenAI({ temperature: 0 })
+    const response = await chat.call([
+        new HumanChatMessage('Can you help me with rewriting an article?'),
+        new SystemChatMessage('Sure, what do you need help with?'),
+        new HumanChatMessage(prompt),
+    ])
+
+    return response.text
 }
